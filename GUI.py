@@ -73,7 +73,7 @@ class Application(tk.Frame):
         self.index = index+2
         self.calculate()
     def calculate(self, event=None, event2=None, event3=None):
-        NEW_LINE = ['toflen']
+        NEW_LINE = ['toflen', 'RBS_sigma']
         for label in self.outputLabels:
             label.destroy()
         params = []
