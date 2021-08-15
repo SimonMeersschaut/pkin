@@ -100,14 +100,12 @@ class Application(tk.Frame):
                 label.grid(row=int(key[1]),column=column)
             else:
                 print(key)
-                try:
-                    if len(value) == 2:
+                if value != 'not detectable':
+                    if type(value) == list:
                         value = (round(value[0], 4), round(value[1], 4))
                     else:
                         if len(str(value)) > 4:
-                            value = round(value, 4)
-                except TypeError:
-                    pass
+                            value = round(float(value), 4)
                 label = tk.Label(self,text=key+':')
                 self.outputLabels.append(label)
                 label.grid(row=self.index,column=0)
