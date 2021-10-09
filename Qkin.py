@@ -2,6 +2,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from json import load, dump
 import pkin
 
+with open('preferences.json', 'r') as f:
+    preferences = load(f)
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -159,6 +162,34 @@ class Ui_MainWindow(object):
         self.theta = QtWidgets.QLabel(self.centralwidget)
         self.theta.setObjectName("theta")
         self.gridLayout_2.addWidget(self.theta, 0, 0, 1, 1)
+
+        self.ERD_E = QtWidgets.QLabel(self.centralwidget)
+        self.ERD_E.setObjectName("ERD_E")
+        self.gridLayout_2.addWidget(
+            self.ERD_E, 6, 0, 1, 1)
+        self.ERD_E_number = QtWidgets.QLabel(self.centralwidget)
+        self.ERD_E_number.setObjectName("ERD_E_number")
+        self.gridLayout_2.addWidget(
+            self.ERD_E_number, 6, 1, 1, 1)
+
+        self.ERD_tof = QtWidgets.QLabel(self.centralwidget)
+        self.ERD_tof.setObjectName("ERD_tof")
+        self.gridLayout_2.addWidget(
+            self.ERD_tof, 7, 0, 1, 1)
+        self.ERD_tof_number = QtWidgets.QLabel(self.centralwidget)
+        self.ERD_tof_number.setObjectName("ERD_tof_number")
+        self.gridLayout_2.addWidget(
+            self.ERD_tof_number, 7, 1, 1, 1)
+
+        self.ERD_sigma = QtWidgets.QLabel(self.centralwidget)
+        self.ERD_sigma.setObjectName("ERD_sigma")
+        self.gridLayout_2.addWidget(
+            self.ERD_sigma, 8, 0, 1, 1)
+        self.ERD_sigma_number = QtWidgets.QLabel(self.centralwidget)
+        self.ERD_sigma_number.setObjectName("ERD_sigma_number")
+        self.gridLayout_2.addWidget(
+            self.ERD_sigma_number, 8, 1, 1, 1)
+
         self.verticalLayout.addLayout(self.gridLayout_2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -166,7 +197,8 @@ class Ui_MainWindow(object):
         self.menubar.setObjectName("menubar")
         self.menufile = QtWidgets.QMenu(self.menubar)
         self.menufile.setObjectName("menufile")
-
+        self.menusettings = QtWidgets.QMenu(self.menubar)
+        self.menusettings.setObjectName("menusettings")
         self.menuhelp = QtWidgets.QMenu(self.menubar)
         self.menuhelp.setObjectName("menuhelp")
         self.menuabout = QtWidgets.QMenu(self.menubar)
@@ -186,6 +218,7 @@ class Ui_MainWindow(object):
         self.menufile.addSeparator()
         self.menufile.addAction(self.actionclose)
         self.menubar.addAction(self.menufile.menuAction())
+        self.menubar.addAction(self.menusettings.menuAction())
         self.menubar.addAction(self.menuabout.menuAction())
         self.menubar.addAction(self.menuhelp.menuAction())
 
@@ -195,33 +228,39 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Pkin - Imec"))
-        self.label.setText(_translate("MainWindow", "element1"))
+        self.label.setText(_translate("MainWindow", "element1 (impinging)"))
         self.label_8.setText(_translate("MainWindow", "energy"))
         self.label_10.setText(_translate("MainWindow", "MeV"))
-        self.label_4.setText(_translate("MainWindow", "TextLabel"))
-        self.label_5.setText(_translate("MainWindow", "TextLabel"))
+        self.label_4.setText(_translate("MainWindow", "/"))
+        self.label_5.setText(_translate("MainWindow", "/"))
         self.label_9.setText(_translate("MainWindow", "degrees"))
-        self.label_6.setText(_translate("MainWindow", "TextLabel"))
-        self.label_7.setText(_translate("MainWindow", "TextLabel"))
+        self.label_6.setText(_translate("MainWindow", "/"))
+        self.label_7.setText(_translate("MainWindow", "/"))
         self.label_11.setText(_translate("MainWindow", "#Neutrons"))
         self.label_12.setText(_translate("MainWindow", "ElementName"))
         self.label_13.setText(_translate("MainWindow", "Z"))
         self.label_14.setText(_translate("MainWindow", "M"))
-        self.label_2.setText(_translate("MainWindow", "element2"))
+        self.label_2.setText(_translate("MainWindow", "element2 (target)"))
         self.label_3.setText(_translate("MainWindow", "theta"))
+
+        self.ERD_E.setText(_translate('MainWindow', 'ERD_E'))
+        self.ERD_tof.setText(_translate('MainWindow', 'ERD_tof'))
+        self.ERD_sigma.setText(_translate('MainWindow', 'ERD_sigma'))
+
         self.RBS_tof.setText(_translate("MainWindow", "RBS_tof"))
-        self.theta_number.setText(_translate("MainWindow", "Theta"))
+        self.theta_number.setText(_translate("MainWindow", "/"))
         self.toflen.setText(_translate("MainWindow", "toflen"))
-        self.toflen_number.setText(_translate("MainWindow", "TextLabel"))
+        self.toflen_number.setText(_translate("MainWindow", "/"))
         self.RBS_E.setText(_translate("MainWindow", "RBS_E"))
-        self.toflen_number2.setText(_translate("MainWindow", ""))
-        self.RBS_E_number.setText(_translate("MainWindow", "TextLabel"))
+        self.toflen_number2.setText(_translate("MainWindow", "/"))
+        self.RBS_E_number.setText(_translate("MainWindow", "/"))
         self.RBS_sigma.setText(_translate("MainWindow", "RBS_sigma"))
-        self.RBS_sigma_number.setText(_translate("MainWindow", "TextLabel"))
-        self.RBS_tof_number.setText(_translate("MainWindow", "TextLabel"))
+        self.RBS_sigma_number.setText(_translate("MainWindow", "/"))
+        self.RBS_tof_number.setText(_translate("MainWindow", "/"))
         self.theta.setText(_translate("MainWindow", "theta"))
         self.menufile.setTitle(_translate("MainWindow", "file"))
         self.menuabout.setTitle(_translate("MainWindow", "about"))
+        self.menusettings.setTitle(_translate("MainWindow", "settings"))
         self.menuhelp.setTitle(_translate("MainWindow", "help"))
         self.actionsave.setText(_translate("MainWindow", "save"))
         self.actionsave.setShortcut(_translate("MainWindow", "Ctrl+S"))
@@ -230,11 +269,24 @@ class Ui_MainWindow(object):
         self.actionload.setToolTip(_translate("MainWindow", "load"))
         self.actionload.setShortcut(_translate("MainWindow", "Ctrl+O"))
         self.actionload.triggered.connect(self.load)
+        self.menusettings.triggered.connect(self.settings)
         self.actionclose.setText(_translate("MainWindow", "close"))
         self.load_combobox()
         self.set_actions()
+        self.load(preferences['last_file'])
+        # self.res
+
+    def resizeEvent(self, event):
+        print('resize')
+        self.updateScreen()
+        sQMainWindow.resizeEvent(self, event)
 
     def calculate(self):
+        def simplify(number):
+            if type(number) == tuple:
+                return str((round(number[0], 4), round(number[1], 4)))
+            return str(round(number, 4))
+
         name1 = self.comboBox.currentText()
         name2 = self.comboBox_2.currentText()
         neutrons_1 = str(self.spinBox.value())
@@ -260,15 +312,24 @@ class Ui_MainWindow(object):
             return None
 
         # display output
-        self.label_5.setText(str(output['m1']))
-        self.label_7.setText(str(output['m2']))
+        self.label_5.setText(simplify(output['m1']))
+        self.label_7.setText(simplify(output['m2']))
 
-        self.theta_number.setText(str(output['theta'])+' radians')
-        self.toflen_number.setText(str(output['toflen']))
+        self.theta_number.setText(simplify(output['theta'])+' radians')
+        self.toflen_number.setText(simplify(output['toflen']))
         try:
-            self.RBS_E_number.setText(str(output['RBS_E']))
-            self.RBS_tof_number.setText(str(output['RBS_tof']))
-            self.RBS_sigma_number.setText(str(output['RBS_sigma']))
+            self.RBS_E_number.setText(simplify(output['RBS_E']))
+            self.RBS_tof_number.setText(simplify(output['RBS_tof']))
+            self.RBS_sigma_number.setText(simplify(output['RBS_sigma']))
+
+            if 'ERD_E' in output:
+                self.ERD_E_number.setText(simplify(output['ERD_E']))
+                self.ERD_tof_number.setText(simplify(output['ERD_tof']))
+                self.ERD_sigma_number.setText(simplify(output['ERD_sigma']))
+            else:
+                self.ERD_E_number.setText('')
+                self.ERD_tof_number.setText('')
+                self.ERD_sigma_number.setText('')
         except KeyError:
             pass
         self.json_data = {'name1': name1, 'neutrons1': neutrons_1, 'name2': name2,
@@ -328,9 +389,15 @@ class Ui_MainWindow(object):
                 return element[3]
 
     def get_neutrons_by_name(self, name):
-        for element in pkin.Data.data:
-            if element[3] == name:
-                return element[0]
+        elements = [element for element in pkin.Data.data if name == element[3]]
+        print(elements)
+        # keys = [float(element[5]) for element in elements]
+        x = sorted(elements, key=lambda element: element[5], reverse=True)
+        print(x)
+        return x[0][0]
+        # for element in pkin.Data.data:
+        #    if element[3] == name:
+        #        return element[0]
 
     def load_combobox(self):
         element_names = []
@@ -341,6 +408,9 @@ class Ui_MainWindow(object):
         for combobox in [self.comboBox, self.comboBox_2]:
             combobox.addItems(element_names)
 
+    def settings(self):
+        print('settings')
+
     def save(self):
         import os
         import tkinter
@@ -349,31 +419,41 @@ class Ui_MainWindow(object):
         curr_directory = os.getcwd()
         name = filedialog.asksaveasfilename(
             initialdir=curr_directory, title="Choose a location to save this measurement", filetypes=(("measurement", "*.Qkin"), ('all file', '*.*')))
+        root.destroy()
         print(name)
         if not('.Qkin' in name):
             name += '.Qkin'
         with open(name, 'w+') as f:
-            dump(self.json_data, f)
-        root.destroy()
+            try:
+                dump(self.json_data, f)
+            except AttributeError:
+                dump({}, f)
+        preferences['last_file'] = name
+        with open('preferences.json', 'w') as f:
+            dump(preferences, f)
 
-    def load(self):
-        import os
-        import tkinter
-        root = tkinter.Tk()
-        from tkinter import filedialog
-        curr_directory = os.getcwd()
-        name = filedialog.askopenfilename(
-            initialdir=curr_directory, title="Choose the measurement to load", filetypes=[("measurement", "*.Qkin")])
-        with open(name, 'r') as f:
-            data = load(f)
-        self.spinBox_2.setValue(int(data['neutrons2']))
-        self.spinBox.setValue(int(data['neutrons1']))
-        self.spinBox_3.setValue(int(data['theta']))
-        self.spinBox_4.setValue(int(data['E_MeV']))
+    def load(self, name=None):
+        if name == None:
+            import os
+            import tkinter
+            root = tkinter.Tk()
+            from tkinter import filedialog
+            curr_directory = os.getcwd()
+            name = filedialog.askopenfilename(
+                initialdir=curr_directory, title="Choose the measurement to load", filetypes=[("measurement", "*.Qkin")])
+            root.destroy()
+        try:
+            with open(name, 'r') as f:
+                data = load(f)
+            self.spinBox_2.setValue(int(data['neutrons2']))
+            self.spinBox.setValue(int(data['neutrons1']))
+            self.spinBox_3.setValue(int(data['theta']))
+            self.spinBox_4.setValue(int(data['E_MeV']))
+        except FileNotFoundError:
+            return None
 
         self.comboBox.setCurrentText(data['name1'])
         self.comboBox_2.setCurrentText(data['name2'])
-        root.destroy()
 
 
 if __name__ == "__main__":

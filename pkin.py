@@ -14,7 +14,9 @@ C_BARN = 1.0E-28     # barn
 C_MEV = (1.0e6*C_EV)
 C_NS = 1.0e-9
 C_CM = 1.0e-2
-TOFLEN = 0.75541
+
+with open('preferences.json', 'r') as f:
+    TOFLEN = load(f)['toflen']
 
 
 def pkin(z1: Union[int, str], z2: Union[int, str], Theta_Deg: float, E_MeV: float) -> tuple:
