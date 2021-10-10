@@ -1,3 +1,4 @@
+import settings
 from PyQt5 import QtCore, QtGui, QtWidgets
 from json import load, dump
 import pkin
@@ -11,8 +12,9 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         # MainWindow.setWindowIcon(QtGui.QIcon('imec.png'))
         MainWindow.setWindowIcon(QtGui.QIcon("imec.png"))
-        MainWindow.resize(500, 400)
+        MainWindow.resize(preferences['width'], preferences['height'])
         MainWindow.setSizeIncrement(QtCore.QSize(1, 0))
+        self.MainWindow = MainWindow
 
         self.element1 = 'Fe'
         self.element2 = 'H'
@@ -61,7 +63,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.spinBox_3 = QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.spinBox_3.setObjectName("spinBox_3")
-        self.spinBox_3.setMaximum(360)
+        self.spinBox_3.setMaximum(180)
         self.horizontalLayout_3.addWidget(self.spinBox_3)
         self.label_9 = QtWidgets.QLabel(self.centralwidget)
         self.label_9.setObjectName("label_9")
@@ -197,8 +199,10 @@ class Ui_MainWindow(object):
         self.menubar.setObjectName("menubar")
         self.menufile = QtWidgets.QMenu(self.menubar)
         self.menufile.setObjectName("menufile")
-        self.menusettings = QtWidgets.QMenu(self.menubar)
+        self.menusettings = QtWidgets.QAction(self.menubar)
         self.menusettings.setObjectName("menusettings")
+
+        # self.menusettings.triggered.connect(settings.open_settings)
         self.menuhelp = QtWidgets.QMenu(self.menubar)
         self.menuhelp.setObjectName("menuhelp")
         self.menuabout = QtWidgets.QMenu(self.menubar)
@@ -218,7 +222,7 @@ class Ui_MainWindow(object):
         self.menufile.addSeparator()
         self.menufile.addAction(self.actionclose)
         self.menubar.addAction(self.menufile.menuAction())
-        self.menubar.addAction(self.menusettings.menuAction())
+        self.menubar.addAction(self.menusettings)
         self.menubar.addAction(self.menuabout.menuAction())
         self.menubar.addAction(self.menuhelp.menuAction())
 
@@ -260,7 +264,7 @@ class Ui_MainWindow(object):
         self.theta.setText(_translate("MainWindow", "theta"))
         self.menufile.setTitle(_translate("MainWindow", "file"))
         self.menuabout.setTitle(_translate("MainWindow", "about"))
-        self.menusettings.setTitle(_translate("MainWindow", "settings"))
+        self.menusettings.setText(_translate("MainWindow", "settings"))
         self.menuhelp.setTitle(_translate("MainWindow", "help"))
         self.actionsave.setText(_translate("MainWindow", "save"))
         self.actionsave.setShortcut(_translate("MainWindow", "Ctrl+S"))
@@ -269,12 +273,23 @@ class Ui_MainWindow(object):
         self.actionload.setToolTip(_translate("MainWindow", "load"))
         self.actionload.setShortcut(_translate("MainWindow", "Ctrl+O"))
         self.actionload.triggered.connect(self.load)
-        self.menusettings.triggered.connect(self.settings)
+        self.menusettings.triggered.connect(self.openSettings)
+
         self.actionclose.setText(_translate("MainWindow", "close"))
         self.load_combobox()
         self.set_actions()
-        self.load(preferences['last_file'])
+        self.load(data=preferences['data'])
+        self.setFontSize()
         # self.res
+
+    def openSettings(self):
+        import os
+        os.startfile('settings.py')
+        # settings.open_settings
+
+    def setFontSize(self):
+        font = QtGui.QFont(preferences["font"], preferences["font-size"])
+        MainWindow.setFont(font)
 
     def resizeEvent(self, event):
         print('resize')
@@ -418,7 +433,7 @@ class Ui_MainWindow(object):
         from tkinter import filedialog
         curr_directory = os.getcwd()
         name = filedialog.asksaveasfilename(
-            initialdir=curr_directory, title="Choose a location to save this measurement", filetypes=(("measurement", "*.Qkin"), ('all file', '*.*')))
+            initialdir=curr_directory, title="Choose a location to save this calculation", filetypes=(("RBS Calculation", "*.Qkin"), ('all file', '*.*')))
         root.destroy()
         print(name)
         if not('.Qkin' in name):
@@ -432,28 +447,39 @@ class Ui_MainWindow(object):
         with open('preferences.json', 'w') as f:
             dump(preferences, f)
 
-    def load(self, name=None):
-        if name == None:
+    def load(self, name=None, data=None):
+
+        if name == None and data == None:
             import os
             import tkinter
             root = tkinter.Tk()
             from tkinter import filedialog
             curr_directory = os.getcwd()
             name = filedialog.askopenfilename(
-                initialdir=curr_directory, title="Choose the measurement to load", filetypes=[("measurement", "*.Qkin")])
+                initialdir=curr_directory, title="Choose the calculation to load", filetypes=[("RBS calculation", "*.Qkin")])
             root.destroy()
+
         try:
-            with open(name, 'r') as f:
-                data = load(f)
+            if data == None:
+                with open(name, 'r') as f:
+                    data = load(f)
             self.spinBox_2.setValue(int(data['neutrons2']))
             self.spinBox.setValue(int(data['neutrons1']))
-            self.spinBox_3.setValue(int(data['theta']))
-            self.spinBox_4.setValue(int(data['E_MeV']))
+            self.spinBox_3.setValue(float(data['theta']))
+            self.spinBox_4.setValue(float(data['E_MeV']))
         except FileNotFoundError:
             return None
 
         self.comboBox.setCurrentText(data['name1'])
         self.comboBox_2.setCurrentText(data['name2'])
+
+    def save_preferences(self):
+        # self.save()
+        preferences['width'] = self.MainWindow.size().width()
+        preferences['height'] = self.MainWindow.size().height()
+        preferences['data'] = self.json_data
+        with open('preferences.json', 'w+') as f:
+            dump(preferences, f)
 
 
 if __name__ == "__main__":
@@ -463,4 +489,5 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
-    sys.exit(app.exec_())
+    app.exec_()
+    ui.save_preferences()
