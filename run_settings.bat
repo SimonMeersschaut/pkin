@@ -1,1 +1,1 @@
-python settings.bat
+python settings.py

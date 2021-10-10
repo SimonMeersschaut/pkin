@@ -1,7 +1,12 @@
-import settings
-from PyQt5 import QtCore, QtGui, QtWidgets
-from json import load, dump
 import pkin
+from json import load, dump
+from PyQt5 import QtCore, QtGui, QtWidgets
+import settings
+import win32gui
+import win32con
+
+hide = win32gui.GetForegroundWindow()
+win32gui.ShowWindow(hide, win32con.SW_HIDE)
 
 with open('preferences.json', 'r') as f:
     preferences = load(f)
@@ -284,7 +289,7 @@ class Ui_MainWindow(object):
 
     def openSettings(self):
         import os
-        os.startfile('settings.py')
+        os.startfile('run_settings.bat')
         # settings.open_settings
 
     def setFontSize(self):
