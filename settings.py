@@ -3,8 +3,8 @@ from json import load, dump
 import win32gui
 import win32con
 
-hide = win32gui.GetForegroundWindow()
-win32gui.ShowWindow(hide, win32con.SW_HIDE)
+# hide = win32gui.GetForegroundWindow()
+# win32gui.ShowWindow(hide, win32con.SW_HIDE)
 
 with open('preferences.json', 'r') as f:
     preferences = load(f)

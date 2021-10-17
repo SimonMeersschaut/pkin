@@ -1,12 +1,15 @@
+
+from os import startfile
+import threading
 import pkin
-from json import load, dump
+from json import load, dump, dumps
 from PyQt5 import QtCore, QtGui, QtWidgets
 import settings
 import win32gui
 import win32con
 
-hide = win32gui.GetForegroundWindow()
-win32gui.ShowWindow(hide, win32con.SW_HIDE)
+# hide = win32gui.GetForegroundWindow()
+# win32gui.ShowWindow(hide, win32con.SW_HIDE)
 
 with open('preferences.json', 'r') as f:
     preferences = load(f)
@@ -206,6 +209,8 @@ class Ui_MainWindow(object):
         self.menufile.setObjectName("menufile")
         self.menusettings = QtWidgets.QAction(self.menubar)
         self.menusettings.setObjectName("menusettings")
+        self.menugraph = QtWidgets.QAction(self.menubar)
+        self.menugraph.setObjectName("menugraph")
 
         # self.menusettings.triggered.connect(settings.open_settings)
         self.menuhelp = QtWidgets.QMenu(self.menubar)
@@ -228,6 +233,7 @@ class Ui_MainWindow(object):
         self.menufile.addAction(self.actionclose)
         self.menubar.addAction(self.menufile.menuAction())
         self.menubar.addAction(self.menusettings)
+        self.menubar.addAction(self.menugraph)
         self.menubar.addAction(self.menuabout.menuAction())
         self.menubar.addAction(self.menuhelp.menuAction())
 
@@ -270,6 +276,7 @@ class Ui_MainWindow(object):
         self.menufile.setTitle(_translate("MainWindow", "file"))
         self.menuabout.setTitle(_translate("MainWindow", "about"))
         self.menusettings.setText(_translate("MainWindow", "settings"))
+        self.menugraph.setText(_translate("MainWindow", "graph"))
         self.menuhelp.setTitle(_translate("MainWindow", "help"))
         self.actionsave.setText(_translate("MainWindow", "save"))
         self.actionsave.setShortcut(_translate("MainWindow", "Ctrl+S"))
@@ -279,6 +286,7 @@ class Ui_MainWindow(object):
         self.actionload.setShortcut(_translate("MainWindow", "Ctrl+O"))
         self.actionload.triggered.connect(self.load)
         self.menusettings.triggered.connect(self.openSettings)
+        self.menugraph.triggered.connect(self.openGraph)
 
         self.actionclose.setText(_translate("MainWindow", "close"))
         self.load_combobox()
@@ -286,6 +294,20 @@ class Ui_MainWindow(object):
         self.load(data=preferences['data'])
         self.setFontSize()
         # self.res
+
+    def openGraph(self):
+        def startFile():
+
+            import os
+
+            single = "'"
+            double = '"'
+            data = self.json_data
+            print(self.json_data)
+            os.system(
+                f'cmd /k "python graph.py {data["name1"]} {data["name2"]} {data["theta"]} {data["E_MeV"]}"')
+        t1 = threading.Thread(target=startFile)
+        t1.start()
 
     def openSettings(self):
         import os
@@ -296,10 +318,10 @@ class Ui_MainWindow(object):
         font = QtGui.QFont(preferences["font"], preferences["font-size"])
         MainWindow.setFont(font)
 
-    def resizeEvent(self, event):
-        print('resize')
-        self.updateScreen()
-        sQMainWindow.resizeEvent(self, event)
+    # def resizeEvent(self, event):
+    #    print('resize')
+    #    self.updateScreen()
+    #    sQMainWindow.resizeEvent(self, event)
 
     def calculate(self):
         def simplify(number):
