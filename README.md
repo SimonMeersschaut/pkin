@@ -1,2 +1,2 @@
 # Pkin
-kinematics of nuclear scattering
+Calculator for scattering cross section and kinematic factor in elastic scattering.
